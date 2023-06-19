@@ -61,7 +61,10 @@ void clean_up() {
     //S[3] = S[3] + T[65] + T[64];
     T[65] = T[65] + T[52] + T[50];
     T[64] = T[64] + T[63] + T[58];
-    T[63] = T[63] + T[63]; //T[63] = T[60] + 1;
+
+    T[63] = T[63] + 1;
+    T[63] = T[63] + T[60];
+    // T[63] = T[63] + T[63]; //T[63] = T[60] + 1;
     T[62] = T[62] + T[52] + T[54]; // T[62] = T[62] + T[51] + T[54];
     //S[4] = S[4] + T[53] + T[51];
     T[61] = T[61] + z[1] + z[0];
@@ -271,7 +274,10 @@ void S_box() {
     T[61] = T[61] + z[1] + z[0];
     S[4] = S[4] + T[53] + T[51];
     T[62] = T[62] + T[52] + T[54]; // T[62] = T[62] + T[51] + T[54];
-    T[63] = T[60] + 1;  
+    // T[63] = T[60] + 1;  
+    T[63] = T[63] + T[60];
+    T[63] = T[63] + 1;
+
     T[64] = T[64] + T[63] + T[58];
     T[65] = T[65] + T[52] + T[50];
     S[3] = S[3] + T[65] + T[64];
@@ -304,17 +310,14 @@ int main() {
         S_box();
         
         int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
-        int ts = 0; for (int i = 0; i < 72; i++) {
-            if (T[i].bit == 1) cout << "i = " << i << endl;
-            ts += T[i].bit;
-        }
+        int ts = 0; for (int i = 0; i < 72; i++) ts += T[i].bit;
         int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
         assert(ys == 0);
         assert(ts == 0);
         assert(zs == 0);
 
         int output = 0;
-        for (int i = 0; i < 8; i++) if (S[i].bit == 1) output |= 1<<(7-i);
+        for (int i = 0; i < 8; i++) if (S[i] == 1) output |= 1<<(7-i);
         printf("%02X%c", output, " \n"[(X + 1) % 16 == 0]);
     }
     return 0;
