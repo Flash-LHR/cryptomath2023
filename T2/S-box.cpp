@@ -1,39 +1,18 @@
 #include <iostream>
-#include <bitset>
 #include <cstring>
 #include <cassert>
+#include "bitDomain.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
-using std::bitset;
 
-struct bitDomain {
-    int bit;
-
-    bitDomain(int _bit = 0) {
-        bit = _bit;
-    }
-
-    bitDomain operator+(const bitDomain& _bitDomain) {
-        return bit ^ _bitDomain.bit;
-    }
-
-    bitDomain operator*(const bitDomain& _bitDomain) {
-        return bit & _bitDomain.bit;
-    }
-
-    bool operator==(const bitDomain& _bitDomain) {
-        return bit == _bitDomain.bit;
-    }
-};
-
-bitDomain U[8];
-bitDomain Y[21];
-bitDomain T[72];
-bitDomain z[18];
-bitDomain S[8];
-// bitDomain EX[16]; 连同Y[5]\Y[17]都没用到
+extern bitDomain U[8];
+extern bitDomain Y[21];
+extern bitDomain T[72];
+extern bitDomain z[18];
+extern bitDomain S[8];
+//extern bitDomain EX[16]; 连同Y[5]\Y[17]都没用到
 
 void QAND(bitDomain x, bitDomain y, bitDomain& z) {
     assert(z == 0);
@@ -279,6 +258,13 @@ void clean_up() {
     T[0] = T[0] + U[3];
     Y[10] = Y[10] + U[1];
     Y[12] = Y[12] + U[2];
+
+    int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
+    int ts = 0; for (int i = 0; i < 72; i++) ts += T[i].bit;
+    int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
+    assert(ys == 0);
+    assert(ts == 0);
+    assert(zs == 0);
 }
 
 void S_box() {
@@ -537,28 +523,28 @@ void S_box() {
     clean_up();
 }
 
-int main() {
+// int main() {
 
-    for (int X = 0; X < 256; ++X)
-    {
-        for (int i = 0; i < 8; i++) U[i] = (X >> i) & 1;
-        memset(Y, 0, sizeof Y);
-        memset(T, 0, sizeof T);
-        memset(z, 0, sizeof z);
-        memset(S, 0, sizeof S);
+//     for (int X = 0; X < 256; ++X)
+//     {
+//         for (int i = 0; i < 8; i++) U[i] = (X >> i) & 1;
+//         memset(Y, 0, sizeof Y);
+//         memset(T, 0, sizeof T);
+//         memset(z, 0, sizeof z);
+//         memset(S, 0, sizeof S);
 
-        S_box();
+//         S_box();
         
-        int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
-        int ts = 0; for (int i = 0; i < 72; i++) ts += T[i].bit;
-        int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
-        assert(ys == 0);
-        assert(ts == 0);
-        assert(zs == 0);
+//         int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
+//         int ts = 0; for (int i = 0; i < 72; i++) ts += T[i].bit;
+//         int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
+//         assert(ys == 0);
+//         assert(ts == 0);
+//         assert(zs == 0);
 
-        int output = 0;
-        for (int i = 0; i < 8; i++) if (S[i] == 1) output |= 1<<(7-i);
-        printf("%02X%c", output, " \n"[(X + 1) % 16 == 0]);
-    }
-    return 0;
-}
+//         int output = 0;
+//         for (int i = 0; i < 8; i++) if (S[i] == 1) output |= 1<<(7-i);
+//         printf("%02X%c", output, " \n"[(X + 1) % 16 == 0]);
+//     }
+//     return 0;
+// }
