@@ -148,7 +148,7 @@ def generateL():
     for offset in offsets:
         l_lines.append('//d')
         for i in range(32):
-            line = 'X0[%d] = X0[%d] + S[%d];' % (i, i, (i + offset) % 32)
+            line = 'X0[%d] = X0[%d]+S[%d];' % (i, i, (i + offset) % 32)
             l_lines.append(line)
     return l_lines
 
@@ -157,11 +157,11 @@ def xorX2():
 
     xorX2_lines.append('//d')
     for i in range(32):
-        line = 'X1[%d] = X1[%d] + X2[%d];' % (i, i, i)
+        line = 'X1[%d] = X1[%d]+X2[%d];' % (i, i, i)
         xorX2_lines.append(line)
     xorX2_lines.append('//d')
     for i in range(32):
-        line = 'X1[%d] = X1[%d] + X3[%d];' % (i, i, i)
+        line = 'X1[%d] = X1[%d]+X3[%d];' % (i, i, i)
         xorX2_lines.append(line)
     return xorX2_lines
 
