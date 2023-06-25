@@ -10,7 +10,7 @@ bitDomain X1[32],X2[32],X3[32],X4[32];
 //F(X1, X2, X3, X4) = (X2, X3, X4, X1 + L(S(X2^X3^X4)))
 bitDomain U[8];
 bitDomain Y[21];
-bitDomain T[72];
+bitDomain T[50];
 bitDomain z[18];
 bitDomain S[8];
 
@@ -66,7 +66,9 @@ int main() {
 }
 
 /*
-dep: 3 + 93 + 7 + 1 + 7 = 111
+dep: 2 + 51 + 7 + 51 + 2 = 113
 T-dep: 14
-width: 128 + 127 * 4 = 636
+width: 128 + 95 * 4 = 508
+T-DW: 7,112
+DW: 57,404
 */

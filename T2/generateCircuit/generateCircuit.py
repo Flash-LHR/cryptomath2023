@@ -140,7 +140,7 @@ def generateL():
     for offset in offsets:
         l_lines.append('//d')
         for i in range(32):
-            line = 'K[%d] = K[%d] + S[%d];' % (i, i, (i + offset) % 32)
+            line = 'X0[%d] = X0[%d] + S[%d];' % (i, i, (i + offset) % 32)
             l_lines.append(line)
     return l_lines
 
@@ -156,14 +156,6 @@ def xorX2():
         line = 'X1[%d] = X1[%d] + X3[%d];' % (i, i, i)
         xorX2_lines.append(line)
     return xorX2_lines
-
-def xorX4():
-    xorX4_lines = []
-    xorX4_lines.append('//d')
-    for i in range(32):
-        line = 'X0[%d] = X0[%d] + K[%d];' % (i, i, i)
-        xorX4_lines.append(line)
-    return xorX4_lines
 
 lines = []
 with open('S-BOX.in', 'r') as file:
@@ -192,13 +184,10 @@ tokenDict = token2Dict(tokens)
 xorX2_lines = xorX2()
 expandLines = sBoxExpand(lines, tokenDict, 4)
 l_lines = generateL()
-xorX4_lines = xorX4()
 
 circuit_lines += xorX2_lines
 circuit_lines += expandLines
 circuit_lines += l_lines
-circuit_lines += xorX4_lines
-circuit_lines += [l_lines[0]] + l_lines[1:][::-1]
 circuit_lines += [expandLines[0]] + expandLines[1:][::-1]
 circuit_lines += [xorX2_lines[0]] + xorX2_lines[1:][::-1]
 
