@@ -24,5 +24,9 @@ for line in lines:
             if len(equ_tokens) != 3 or equ_tokens[0] != equ_tokens[1]:
                 raise Exception(equ, equ_tokens)
             tokens.append(equ_tokens[1])
-            tokens.append(equ_tokens[2])
+            if equ_tokens[2] != '1':
+                tokens.append(equ_tokens[2])
+    tokens = sorted(tokens)
+    if len(tokens) != len(set(tokens)):
+        raise Exception(tokens, line)
 print('OK')
