@@ -36,10 +36,18 @@ def sBoxExpand(lines, tokenDict, cnt):
         if line.startswith('//'):
             if line.startswith('//d'):
                 expandLines.append(copy.deepcopy(line))
+        elif line.startswith('\n') or line == '':
+            pass
         else:
             if line.startswith('QAND'):
-                token_list = line.split('(')[1].split(')')[0].split(',')
-                line = token_list[2] + '=' + token_list[2] + ' + ' + token_list[0] + ' * ' + token_list[1] + ';'
+                token_list = [x.strip() for x in line.split('(')[1].split(')')[0].split(',')]
+                line = token_list[2] + ' = ' + token_list[2] + '+' + token_list[0] + '*' + token_list[1] + ';'
+            else:
+                line = line.replace('+', ' ')
+                line = line.replace('=', ' ')
+                line = line.replace(';', ' ')
+                token_list = [x.strip() for x in line.split(' ') if x != '']
+                line = token_list[0] + ' = ' + token_list[1] + '+' + token_list[2] + ';'
             for i in range(cnt):
                 curLine = line.strip()
                 for key, value in tokenDict.items():
@@ -50,7 +58,7 @@ def sBoxExpand(lines, tokenDict, cnt):
                     elif value[0] == 'Y':
                         new_var = value[0] + '[' + '%d' % (value[1] + i * 21) + ']'
                     elif value[0] == 'T':
-                        new_var = value[0] + '[' + '%d' % (value[1] + i * 72) + ']'
+                        new_var = value[0] + '[' + '%d' % (value[1] + i * 50) + ']'
                     elif value[0] == 'z':
                         new_var = value[0] + '[' + '%d' % (value[1] + i * 18) + ']'
                     else:
