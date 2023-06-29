@@ -409,7 +409,6 @@ void S_box() {
     T[29] = T[29] + T[12];
     T[31] = T[31] + T[26];
     T[33] = T[33] + T[10];
-    T[35] = T[35] + T[30];
     T[41] = T[41] + T[6];
     //d
     T[24] = T[24] + Y[19];
@@ -425,9 +424,11 @@ void S_box() {
     T[37] = T[37] + T[26];
     T[41] = T[41] + T[5];
     //d
-    T[31] = T[31] + T[30];
+    T[35] = T[35] + T[30];
     T[34] = T[34] + T[28];
     T[44] = T[44] + T[29];
+    //d
+    T[31] = T[31] + T[30];
     //d
     QAND(T[29], T[31], T[32]);
     QAND(T[34], T[35], T[36]);
@@ -563,6 +564,12 @@ void S_box() {
     S[3] = S[3] + 1;
     S[6] = S[6] + 1;
     S[7] = S[7] + 1;
+
+    // printf("U:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, U[i].bit); printf("\n");
+    // printf("Y:"); for (int i = 0; i < 21; i++) printf(" %d(%d)", i, Y[i].bit); printf("\n");
+    // printf("T:"); for (int i = 0; i < 50; i++) printf(" %d(%d)", i, T[i].bit); printf("\n");
+    // printf("z:"); for (int i = 0; i < 18; i++) printf(" %d(%d)", i, z[i].bit); printf("\n");
+    // printf("S:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, S[i].bit); printf("\n");
 }
 
 int main() {
