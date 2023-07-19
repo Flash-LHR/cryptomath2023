@@ -28,5 +28,10 @@ for line in lines:
                 tokens.append(equ_tokens[2])
     tokens = sorted(tokens)
     if len(tokens) != len(set(tokens)):
-        raise Exception(tokens, line)
+        rep_tokens = []
+        for i in range(1, len(tokens)):
+            if tokens[i - 1] == tokens[i]:
+                rep_tokens.append(tokens[i])
+        rep_tokens = sorted(list(set(rep_tokens)))
+        raise Exception(rep_tokens, line)
 print('OK')
