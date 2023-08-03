@@ -1,5 +1,13 @@
 import copy
 
+def process_backend_comment(lines):
+    for i in range(len(lines)):
+        if lines[i].startswith('//'):
+            continue
+        comment_pos = lines[i].find('//')
+        if comment_pos != -1:
+            lines[i] = lines[i][:comment_pos]
+
 def getToken(lines):
     token = []
     for line in lines:
@@ -61,6 +69,8 @@ def sBoxExpand(lines, tokenDict, cnt):
                         new_var = value[0] + '[' + '%d' % (value[1] + i * 50) + ']'
                     elif value[0] == 'z':
                         new_var = value[0] + '[' + '%d' % (value[1] + i * 18) + ']'
+                    elif value[0] == 'F':
+                        new_var = value[0] + '[' + '%d' % (value[1] + i * 10) + ']'
                     else:
                         raise ValueError("sBoxExpand Invalid value")
                     curLine = curLine.replace(key, new_var)
@@ -187,6 +197,7 @@ for i in range(len(lines)):
 
 circuit_lines = []
 
+process_backend_comment(lines)
 tokens = getToken(lines)
 tokenDict = token2Dict(tokens)
 xorX2_lines = xorX2()
