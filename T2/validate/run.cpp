@@ -57,6 +57,8 @@ int main(int argc, char **argv) {
         testVectorIn >> input;
         testVectorOut << func(input) << endl;
     }
+    testVectorIn.close();
+    testVectorOut.close();
     return 0;
 }
 
