@@ -137,20 +137,22 @@ def addMask(lines, tokens):
     tokens += list(tokenDict.values())
 
 def printCircuit(circuit):
+    f = open('circuit.out', 'w')
     for x in circuit:
         ending = ''
         for i in range(len(x)):
-            print(x[i], end='')
+            f.write(x[i])
             if i == 0:
-                print()
+                f.write('\n')
             elif i < len(x) - 1:
-                print('  ', end='')
-        print('\n')
-    print('#Reordering')
-    print('z1=y33;', end='')
+                f.write('  ')
+        f.write('\n\n')
+    f.write('#Reordering\n')
+    f.write('z1=y33;')
     for i in range(2, 129):
-        print(' z%d=y%d;' % (i, (i + 31) % 128 + 1), end='')
-    print()
+        f.write(' z%d=y%d;' % (i, (i + 31) % 128 + 1))
+    f.write('\n')
+    f.close()
 
 def generateL():
     l_lines = []
