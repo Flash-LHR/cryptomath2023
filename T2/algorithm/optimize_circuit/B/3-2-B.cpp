@@ -1,35 +1,9 @@
-#include <iostream>
-#include <cstring>
-#include <cassert>
-#include "bitDomain.h"
 
-using std::cin;
-using std::cout;
-using std::endl;
+/*
+替身优化
+z[16] = z[16] + T[40];
+*/
 
- bitDomain U[8];
- bitDomain Y[21];
- bitDomain T[50];
- bitDomain z[18];
- bitDomain S[8];
- bitDomain F[10];
-//bitDomain EX[16]; 连同Y[5]\Y[17]都没用到
-
-void QAND(bitDomain x, bitDomain y, bitDomain& z) {
-    // assert(z == 0);
-    z = x * y + z;
-}
-
-void QAND_INV(bitDomain x, bitDomain y, bitDomain& z) {
-    // assert(z == x * y);
-    z = x * y + z;
-}
-
-void clean_up() {
-    // just reverse the s_box()
-}
-
-void S_box() {
 //d
 U[0] = U[0] + 1;
 z[11] = z[11] + U[1];
@@ -336,15 +310,6 @@ z[16] = z[16] + T[40];
 //d
 T[30] = T[30] + T[36];
 T[10] = T[10] + T[5];
-F[1] = F[1] + S[0];
-F[2] = F[2] + S[1];
-F[3] = F[3] + S[2];
-F[4] = F[4] + S[3];
-F[5] = F[5] + S[4];
-F[6] = F[6] + S[5];
-F[7] = F[7] + S[6];
-F[8] = F[8] + S[7];
-F[9] = F[9] + F[0];
 //d calc z
 QAND(S[0], Y[1], z[11]);
 QAND(S[1], Y[3], z[17]);
@@ -355,15 +320,16 @@ QAND(S[5], U[1], z[12]);
 QAND(S[6], Y[12], z[13]);
 QAND(S[7], Y[11], z[5]);
 QAND(F[0], Y[8], z[10]);
-QAND(F[1], U[0], z[2]);
-QAND(F[2], Y[7], z[8]);
-QAND(F[3], Y[6], z[6]);
-QAND(F[4], Y[4], z[0]);
-QAND(F[5], Y[15], z[16]);
-QAND(F[6], Y[14], z[3]);
-QAND(F[7], Y[13], z[4]);
-QAND(F[8], Y[10], z[14]);
-QAND(F[9], Y[9], z[1]);
+//d
+QAND(S[0], U[0], z[2]);
+QAND(S[1], Y[7], z[8]);
+QAND(S[2], Y[6], z[6]);
+QAND(S[3], Y[4], z[0]);
+QAND(S[4], Y[15], z[16]);
+QAND(S[5], Y[14], z[3]);
+QAND(S[6], Y[13], z[4]);
+QAND(S[7], Y[10], z[14]);
+QAND(F[0], Y[9], z[1]);
 //d
 z[15] = z[15] + T[43];
 T[30] = T[30] + z[10];
@@ -459,45 +425,3 @@ S[7] = S[7] + T[40];
 S[2] = S[2] + Y[14];
 S[6] = S[6] + T[8];
 S[7] = S[7] + T[43];
-
-
-
-
-    // printf("Y:"); for (int i = 0; i < 21; i++) printf(" %d(%d)", i, Y[i].bit); printf("\n");
-    // printf("T:"); for (int i = 0; i < 50; i++) printf(" %d(%d)", i, T[i].bit); printf("\n");
-    // printf("z:"); for (int i = 0; i < 18; i++) printf(" %d(%d)", i, z[i].bit); printf("\n");
-    // printf("S:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, S[i].bit); printf("\n");
-}
-
-int main() {
-
-    for (int X = 0; X < 256; ++X)
-    {
-        for (int i = 0; i < 8; i++) U[i] = (X >> i) & 1;
-    // printf("U:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, U[i].bit); printf("\n");
-        memset(Y, 0, sizeof Y);
-        memset(T, 0, sizeof T);
-        memset(z, 0, sizeof z);
-        memset(S, 0, sizeof S);
-        memset(F, 0, sizeof F);
-
-        S_box();
-
-        int output = 0;
-        for (int i = 0; i < 8; i++) if (S[i] == 1) output |= 1<<(7-i);
-        printf("%02X%c", output, " \n"[(X + 1) % 16 == 0]);
-
-        clean_up();
-
-        // int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
-        // int ts = 0; for (int i = 0; i < 50; i++) ts += T[i].bit;
-        // int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
-        // int ss = 0; for (int i = 0; i < 8; i++) ss += S[i].bit;
-        // assert(ys == 0);
-        // assert(ts == 0);
-        // assert(zs == 0);
-        // assert(ss == 0);
-        // break;
-    }
-    return 0;
-}

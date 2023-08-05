@@ -1,35 +1,16 @@
-#include <iostream>
-#include <cstring>
-#include <cassert>
-#include "bitDomain.h"
+/*
+增加9个辅助位，优化T深度减1
+F[1] = F[1] + S[0];
+F[2] = F[2] + S[1];
+F[3] = F[3] + S[2];
+F[4] = F[4] + S[3];
+F[5] = F[5] + S[4];
+F[6] = F[6] + S[5];
+F[7] = F[7] + S[6];
+F[8] = F[8] + S[7];
+F[9] = F[9] + F[0];
+*/
 
-using std::cin;
-using std::cout;
-using std::endl;
-
- bitDomain U[8];
- bitDomain Y[21];
- bitDomain T[50];
- bitDomain z[18];
- bitDomain S[8];
- bitDomain F[10];
-//bitDomain EX[16]; 连同Y[5]\Y[17]都没用到
-
-void QAND(bitDomain x, bitDomain y, bitDomain& z) {
-    // assert(z == 0);
-    z = x * y + z;
-}
-
-void QAND_INV(bitDomain x, bitDomain y, bitDomain& z) {
-    // assert(z == x * y);
-    z = x * y + z;
-}
-
-void clean_up() {
-    // just reverse the s_box()
-}
-
-void S_box() {
 //d
 U[0] = U[0] + 1;
 z[11] = z[11] + U[1];
@@ -459,45 +440,3 @@ S[7] = S[7] + T[40];
 S[2] = S[2] + Y[14];
 S[6] = S[6] + T[8];
 S[7] = S[7] + T[43];
-
-
-
-
-    // printf("Y:"); for (int i = 0; i < 21; i++) printf(" %d(%d)", i, Y[i].bit); printf("\n");
-    // printf("T:"); for (int i = 0; i < 50; i++) printf(" %d(%d)", i, T[i].bit); printf("\n");
-    // printf("z:"); for (int i = 0; i < 18; i++) printf(" %d(%d)", i, z[i].bit); printf("\n");
-    // printf("S:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, S[i].bit); printf("\n");
-}
-
-int main() {
-
-    for (int X = 0; X < 256; ++X)
-    {
-        for (int i = 0; i < 8; i++) U[i] = (X >> i) & 1;
-    // printf("U:"); for (int i = 0; i < 8; i++) printf(" %d(%d)", i, U[i].bit); printf("\n");
-        memset(Y, 0, sizeof Y);
-        memset(T, 0, sizeof T);
-        memset(z, 0, sizeof z);
-        memset(S, 0, sizeof S);
-        memset(F, 0, sizeof F);
-
-        S_box();
-
-        int output = 0;
-        for (int i = 0; i < 8; i++) if (S[i] == 1) output |= 1<<(7-i);
-        printf("%02X%c", output, " \n"[(X + 1) % 16 == 0]);
-
-        clean_up();
-
-        // int ys = 0; for (int i = 0; i < 21; i++) ys += Y[i].bit;
-        // int ts = 0; for (int i = 0; i < 50; i++) ts += T[i].bit;
-        // int zs = 0; for (int i = 0; i < 18; i++) zs += z[i].bit;
-        // int ss = 0; for (int i = 0; i < 8; i++) ss += S[i].bit;
-        // assert(ys == 0);
-        // assert(ts == 0);
-        // assert(zs == 0);
-        // assert(ss == 0);
-        // break;
-    }
-    return 0;
-}
